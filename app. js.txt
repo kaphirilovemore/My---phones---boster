@@ -1,0 +1,215 @@
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then(() => console.log("App ready for installation"))
+      .catch(error => console.log("Service worker error:", error));
+  });
+}
+// LOVEMORE iOS - Main application
+
+const $ = id => document.getElementById(id);
+
+let performanceMode = localStorage.getItem("performance") || "balanced";
+let lightMode = localStorage.getItem("theme") === "light";
+
+// Live clock
+function updateClock() {
+  const now = new Date();
+
+  $("clock").textContent = now.toLocaleTimeString(
+    "en-GB",
+    {hour: "2-digit", minute: "2-digit"}
+  );
+
+  $("statusTime").textContent = now.toLocaleTimeString(
+    "en-GB",
+    {hour: "2-digit", minute: "2-digit"}
+  );
+
+  $("date").textContent = now.toLocaleDateString(
+    "en-GB",
+    {weekday: "long", day: "numeric", month: "long"}
+  );
+}
+
+updateClock();
+setInterval(updateClock, 30000);
+
+// Theme
+function applyTheme() {
+  document.body.classList.toggle("light", lightMode);
+  localStorage.setItem("theme", lightMode ? "light" : "dark");
+}
+
+// Performance
+function applyPerformance() {
+  $("performanceText").textContent =
+    performanceMode === "fast"
+      ? "Maximum speed mode"
+      : performanceMode === "balanced"
+      ? "Balanced performance"
+      : "Visual experience mode";
+
+  document.body.classList.toggle(
+    "fast-mode",
+    performanceMode === "fast"
+  );
+
+  localStorage.setItem("performance", performanceMode);
+}
+
+// Home and pages
+function showPage(name) {
+  const page = $("page");
+  const content = $("pageContent");
+
+  if (name === "home") {
+    page.classList.add("hidden");
+    return;
+  }
+
+  page.classList.remove("hidden");
+
+  if (name === "control") {
+    content.innerHTML = `
+      <h2>Control Centre</h2>
+      <div class="control-grid">
+        <button class="active" onclick="toggleControl(this)">◉ Wi-Fi<br>Connected*</button>
+        <button onclick="toggleControl(this)">ᛒ Bluetooth</button>
+        <button onclick="toggleControl(this)">✈ Airplane Mode</button>
+        <button onclick="toggleControl(this)">☾ Do Not Disturb</button>
+        <button onclick="toggleControl(this)">🔦 Flashlight</button>
+        <button onclick="toggleControl(this)">◩ Battery Saver</button>
+      </div>
+      <h3 style="margin-top:25px">Brightness</h3>
+      <input type="range" min="20" max="100" value="100"
+        oninput="changeBrightness(this.value)">
+      <h3>Volume</h3>
+      <input type="range" min="0" max="100" value="70"
+        oninput="changeVolume(this.value)">
+      <p style="font-size:11px;color:var(--muted)">
+        *Visual controls are demonstrations. Real system
+        settings require Android integration.
+      </p>
+    `;
+  }
+
+  if (name === "settings") {
+    content.innerHTML = `
+      <h2>Settings</h2>
+      <button class="setting-item" onclick="changeTheme()">
+        🎨 Appearance
+        <span>Switch light and dark modes</span>
+      </button>
+      <button class="setting-item" onclick="changePerformance()">
+        ⚡ Performance
+        <span>Current: ${performanceMode}</span>
+      </button>
+      <button class="setting-item" onclick="showPage('library')">
+        📱 Applications
+        <span>View your application library</span>
+      </button>
+      <button class="setting-item" onclick="showIsland()">
+        🏝 Dynamic Island
+        <span>Test the notification animation</span>
+      </button>
+      <button class="setting-item" onclick="showAbout()">
+        ℹ About Lovemore iOS
+        <span>Application information</span>
+      </button>
+    `;
+  }
+
+  if (name === "library") {
+    content.innerHTML = `
+      <h2>App Library</h2>
+      <input id="searchApps" placeholder="Search applications..."
+        style="width:100%;padding:14px;border-radius:12px;
+        border:0;margin-bottom:20px"
+        oninput="filterApps(this.value)">
+      <div id="libraryList" class="control-grid">
+        ${["Phone","Messages","Camera","Photos","Music",
+        "Calendar","Notes","Settings","Browser","Clock",
+        "Files","Calculator"].map(app => `
+          <button onclick="openApp('${app}','📱')">${app}</button>
+        `).join("")}
+      </div>
+    `;
+  }
+}
+
+function toggleControl(button) {
+  button.classList.toggle("active");
+}
+
+function changeBrightness(value) {
+  $("pageContent").style.opacity = 0.45 + value / 200;
+}
+
+function changeVolume(value) {
+  $("islandText").textContent = "Volume " + value + "%";
+}
+
+function changeTheme() {
+  lightMode = !lightMode;
+  applyTheme();
+}
+
+function changePerformance() {
+  performanceMode =
+    performanceMode === "balanced" ? "fast" :
+    performanceMode === "fast" ? "visual" : "balanced";
+
+  applyPerformance();
+  showPage("settings");
+}
+
+function filterApps(query) {
+  const buttons = document.querySelectorAll("#libraryList button");
+
+  buttons.forEach(button => {
+    button.style.display =
+      button.textContent.toLowerCase().includes(query.toLowerCase())
+      ? "block" : "none";
+  });
+}
+
+// App opening
+function openApp(name, icon) {
+  $("modalTitle").textContent = name;
+  $("modalIcon").textContent = icon;
+  $("appModal").classList.remove("hidden");
+}
+
+function closeApp() {
+  $("appModal").classList.add("hidden");
+}
+
+// Dynamic Island
+function showIsland() {
+  $("island").style.width = "230px";
+  $("islandText").textContent = "Welcome to Lovemore iOS";
+
+  setTimeout(() => {
+    $("island").style.width = "145px";
+    $("islandText").textContent = "LOVEMORE iOS";
+  }, 2500);
+}
+
+// About
+function showAbout() {
+  $("pageContent").innerHTML = `
+    <h2>LOVEMORE iOS</h2>
+    <p>Fast. Smooth. Elegant.</p>
+    <p style="margin-top:15px">
+      Version 1.0<br>
+      Created for Android.<br>
+      Developed by Lovemore.
+    </p>
+  `;
+}
+
+// Start application
+applyTheme();
+applyPerformance();

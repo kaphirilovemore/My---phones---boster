@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head><link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#101827">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+</head>
+
+<body>
+  
+</body>
+
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#11152c">
+  <title>LOVEMORE iOS</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <main class="phone">
+
+    <header class="status-bar">
+      <span id="statusTime">9:41</span>
+      <span>●  WiFi  ▰</span>
+    </header>
+
+    <div class="island" id="island"
+         onclick="showIsland()">
+      <span class="island-dot"></span>
+      <span id="islandText">LOVEMORE iOS</span>
+    </div>
+
+    <section class="welcome">
+      <p id="date"></p>
+      <h1 id="clock">09:41</h1>
+      <p class="greeting">Welcome back, Lovemore.</p>
+    </section>
+
+    <section class="widget">
+      <div>
+        <small>MY PHONE</small>
+        <h2>Beautifully yours.</h2>
+        <p id="performanceText">Balanced performance</p>
+      </div>
+      <div class="widget-icon"></div>
+    </section>
+
+    <div class="section-heading">
+      <h3>Applications</h3>
+      <button onclick="showPage('library')">See all →</button>
+    </div>
+
+    <section class="apps" id="apps">
+      <button class="app" onclick="openApp('Phone','📞')">
+        <span class="app-icon green">☎</span>
+        <small>Phone</small>
+      </button>
+      <button class="app" onclick="openApp('Messages','💬')">
+        <span class="app-icon blue">✉</span>
+        <small>Messages</small>
+      </button>
+      <button class="app" onclick="openApp('Camera','📷')">
+        <span class="app-icon silver">◉</span>
+        <small>Camera</small>
+      </button>
+      <button class="app" onclick="openApp('Photos','🌈')">
+        <span class="app-icon pink">✿</span>
+        <small>Photos</small>
+      </button>
+      <button class="app" onclick="openApp('Music','🎵')">
+        <span class="app-icon red">♫</span>
+        <small>Music</small>
+      </button>
+      <button class="app" onclick="openApp('Calendar','📅')">
+        <span class="app-icon white">31</span>
+        <small>Calendar</small>
+      </button>
+      <button class="app" onclick="openApp('Notes','📝')">
+        <span class="app-icon yellow">≡</span>
+        <small>Notes</small>
+      </button>
+      <button class="app" onclick="openApp('Settings','⚙️')">
+        <span class="app-icon silver">⚙</span>
+        <small>Settings</small>
+      </button>
+    </section>
+
+    <section class="quick-panel">
+      <button onclick="showPage('control')">◉ Control Centre</button>
+      <button onclick="showPage('settings')">⚙ Settings</button>
+      <button onclick="showPage('library')">▦ App Library</button>
+    </section>
+
+    <nav class="dock">
+      <button onclick="openApp('Phone','📞')">☎</button>
+      <button onclick="openApp('Messages','💬')">✉</button>
+      <button onclick="openApp('Browser','🌐')">🌐</button>
+      <button onclick="openApp('Music','🎵')">♫</button>
+    </nav>
+
+    <section id="page" class="page hidden">
+      <button class="back" onclick="showPage('home')">← Home</button>
+      <div id="pageContent"></div>
+    </section>
+
+    <div id="appModal" class="modal hidden">
+      <div class="modal-card">
+        <button class="close" onclick="closeApp()">✕</button>
+        <div id="modalIcon" class="modal-icon"></div>
+        <h2 id="modalTitle"></h2>
+        <p>This is your Lovemore iOS app interface.</p>
+        <button class="primary" onclick="closeApp()">Done</button>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
